@@ -4,7 +4,7 @@
 -------------------------
 ### Karel the Robot Demostrate the basic idea of good practice and algorithms, the indispensable parts of solving a problem.
 
-### Assignment 2 Review
+## Assignment 2 Review
 ------------------------
 ### I am more familiar with the  graphicx and consoule library.
 
