@@ -13,7 +13,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.xml.transform.Source;
 
-public class NameSurfer extends ConsoleProgram implements NameSurferConstants {
+public class NameSurfer extends Program implements NameSurferConstants {
 
 /* Method: init() */
 /**
@@ -21,6 +21,8 @@ public class NameSurfer extends ConsoleProgram implements NameSurferConstants {
  * and initializing the interactors at the top of the window.
  */
 	public void init() {
+		graph = new NameSurferGraph();
+		add(graph);
  		lastCentury = new NameSurferDataBase(NAMES_DATA_FILE);
 	    createController();
 	    addActionListeners();
@@ -37,16 +39,17 @@ public class NameSurfer extends ConsoleProgram implements NameSurferConstants {
 		
 		// Detect both click and ENTER for graph
 		if(source == graphButton || source == nameField) {
-			println(nameField.getText());
-			entry = lastCentury.findEntry(nameField.getText());
-			println(entry.toString());
+			if(!nameField.getText().equals("")) {
+				entry = lastCentury.findEntry(nameField.getText());
+				ClickGraphButton(entry);
+			}
 		} if (source == clearButton) {
-			println("Clear");
+			ClickClearButton();
 		}
 	}
+	
 /* Method: createController() */
 	public void createController() {
-		setFont("Courier-24");
 		nameField = new JTextField(MAX_NAME);
 		nameField.addActionListener(this); //Detects ENTER key pressed
 		graphButton = new JButton("Graph");
@@ -58,6 +61,17 @@ public class NameSurfer extends ConsoleProgram implements NameSurferConstants {
 		add(clearButton,NORTH);
 	}
 	
+	private void ClickClearButton() {
+		graph.clear();
+		graph.update();
+	}
+	
+	private void ClickGraphButton(NameSurferEntry entry) {
+		if (entry != null) {
+			graph.addEntry(entry);
+			graph.update();
+		} 
+	}
 	
 	/* private instance variable */
 	private JTextField nameField;
@@ -67,5 +81,6 @@ public class NameSurfer extends ConsoleProgram implements NameSurferConstants {
 	private static int MAX_NAME = 25;
 	private NameSurferDataBase lastCentury;
 	private NameSurferEntry entry;
+	private NameSurferGraph graph;
 	
 }

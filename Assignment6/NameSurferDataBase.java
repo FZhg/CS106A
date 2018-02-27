@@ -10,6 +10,7 @@
  */
 
 import acm.util.*;
+import sun.security.util.Length;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,8 +18,12 @@ import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.*;
 
+import javax.naming.NameParser;
 import javax.print.attribute.standard.PrinterLocation;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
+import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
 import com.sun.xml.internal.bind.v2.runtime.Name;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
@@ -37,7 +42,6 @@ public class NameSurferDataBase implements NameSurferConstants {
 			String line;
 			while (( line = rd.readLine()) != null ) {
 			NameSurferEntry entry = new NameSurferEntry(line);
-			System.out.println(entry.toString());
 			this.database.put(entry.getName(), entry);
 			}
 			rd.close();
@@ -53,14 +57,22 @@ public class NameSurferDataBase implements NameSurferConstants {
  * method returns null.
  */
 	public NameSurferEntry findEntry(String name) {
-		name = name.toLowerCase();
-		System.out.println(name);
-		try {
-			return this.database.get(name);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		String nameProcessed = toName(name);
+		return this.database.get(nameProcessed);
+	}
+
+/* Method: toName(name) */
+/**
+ * make the user's input into the name form 
+ * the fisrt letter is capital and the rest of letters are lowercase.
+ */
+	private String toName(String name) {
+		char cap = Character.toUpperCase(name.charAt(0));
+		String nameProcessed = "" + cap;
+		for (int i  = 1; i < name.length(); i ++) {
+			nameProcessed += Character.toLowerCase(name.charAt(i));
 		}
+		return nameProcessed.toString();
 	}
 }
 
